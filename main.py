@@ -34,3 +34,54 @@ class Mag(Postac):
         if self.mana >= zaklecie.koszt_many:
             self.mana -= zaklecie.koszt_many
             print(f"{self.imie} rzuca zaklecie {zaklecie.nazwa}!")
+
+class Zaklecie:
+    def __init__(self, nazwa, obrazenia, koszt_many):
+        self.nazwa = nazwa
+        self.obrazenia = obrazenia
+        self.koszt_many = koszt_many
+
+    def opis(self):
+        return f"{self.nazwa}: {self.obrazenia} DMG, koszt many: {self.koszt_many}"
+
+class Przedmiot:
+    def __init__(self, nazwa, bonus_atak, bonus_zdrowie, bonus_obrona, typ):
+        self.nazwa = nazwa
+        self.bonus_atak = bonus_atak
+        self.bonus_zdrowie = bonus_zdrowie
+        self.bonus_obrona = bonus_obrona
+        self.typ = typ 
+
+    def wypisz_przedmiot(self):
+        return f"{self.nazwa} (+{self.bonus_atak} atak, +{self.bonus_zdrowie} hp, +{self.bonus_obrona} obrona) [{self.typ}]"
+
+class Ekwipunek:
+    def __init__(self):
+        self.przedmioty = []
+
+    def dodaj_przedmiot(self, przedmiot):
+        self.przedmioty.append(przedmiot)
+
+    def usun_przedmiot(self, nazwa):
+        self.przedmioty = [p for p in self.przedmioty if p.nazwa != nazwa]
+
+    def wypisz_ekwipunek(self):
+        for p in self.przedmioty:
+            print(p.wypisz_przedmiot())
+
+class Inwentarz:
+    def __init__(self):
+        self.zalozone = {"bron": None, "zbroja": None}
+
+    def zaloz(self, przedmiot):
+        self.zalozone[przedmiot.typ] = przedmiot
+
+    def zdejmij(self, typ):
+        self.zalozone[typ] = None
+
+    def opis(self):
+        for typ, przedmiot in self.zalozone.items():
+            if przedmiot:
+                print(f"{typ}: {przedmiot.wypisz_przedmiot()}")
+            else:
+                print(f"{typ}: brak")
