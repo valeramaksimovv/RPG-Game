@@ -85,3 +85,11 @@ class Inwentarz:
                 print(f"{typ}: {przedmiot.wypisz_przedmiot()}")
             else:
                 print(f"{typ}: brak")
+
+class Walka:
+    def __init__(self, postac1, postc2)
+        self.postac1 = postac1
+        self.postac2 = postac2
+        self.czyja_tura = 1
+
+    def 

@@ -16,3 +16,17 @@ Equipment and inventory (weapons, armor)
 Turn-based combat
 
 Console-based game logic
+
+
+Postac +
+Wojownik (Postac) +
+Mag (Postac) +
+
+Zaklecie +
+Przedmiot +
+Ekwipunek +
+Inwentarz +
+
+Walka
+
+
