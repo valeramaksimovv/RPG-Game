@@ -8,7 +8,7 @@ class Postac:
         self.inwentarz = Inwentarz()
 
     def otrzymaj_obrazenia(self, obrazenia):
-        zmniejszone = max (obrazenie - self.obrona, 0)
+        zmniejszone = max(obrazenia - self.obrona, 0)
         self.zdrowie -= zmniejszone
         print(f"{self.imie} otrzymuje {zmniejszone} obrazen (pozostalo {self.zdrowie})")
 
@@ -87,7 +87,7 @@ class Inwentarz:
                 print(f"{typ}: brak")
 
 class Walka:
-    def __init__(self, postac1, postc2)
+    def __init__(self, postac1, postac2):
         self.postac1 = postac1
         self.postac2 = postac2
         self.czyja_tura = 1
