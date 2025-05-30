@@ -92,4 +92,30 @@ class Walka:
         self.postac2 = postac2
         self.czyja_tura = 1
 
-    def 
+    def rozpocnij(self):
+        print("--- START WALKI ---")
+        while self.poctac1.czy_zyje() and self.postac2.czy_zyje():
+            self.wykonaj_ture()
+            self.sprawdz_zwyciezce()
+    
+    def wykonaj_ture(self):
+        if self.czyja_tura == 1:
+            print(f"Tura: {self.postac1.imie}")
+            if isinstance(self.postac1, Mag) and self.postac1.lista_zaklec:
+                self.postac1.rzuc_zaklecie(self.postac1.lista_zaklec[0], self.postac2)
+            elif isinstance(self.postac2, Wojownik):
+                self.postac1.mocny_cios(self.postac2)
+            self.czyja_tura = 2
+        else:
+            print(f"Tura: {self.postac2.imie}")
+            if isinstance(self.postac1, Mag) and self.postac2.lista_zaklec:
+                self.postac2.rzuc_zaklecie(self.postac1.lista_zaklec[0], self.postac1)
+            elif isinstance(self.postac2, Wojownik):
+                self.postac2.mocny_cios(self.postac2)
+            self.czyja_tura = 1
+    
+    def sprawdz_zwyciezce(self):
+        if self.postac1.czy_zyje():
+            print(f"Zwyciezca: {self.postac1.imei}")
+        else:
+            print(f"Zwyciezca: {self.postac1.imei}")
