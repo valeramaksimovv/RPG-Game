@@ -1,39 +1,56 @@
 class Postac:
-    def __init__ (self, imie, zdrowie, atak, obrona):
+    def __init__(self, imie, zdrowie, atak, obrona, unik=0.1, trafienie=0.8):
         self.imie = imie
         self.zdrowie = zdrowie
+        self.max_zdrowie = zdrowie
         self.atak = atak
-        self.oborona = obrona
+        self.obrona = obrona
+        self.unik = unik
+        self.trafienie = trafienie
         self.ekwipunek = Ekwipunek()
         self.inwentarz = Inwentarz()
 
     def otrzymaj_obrazenia(self, obrazenia):
+        if random.random() < self.unik:
+            print(f"{self.imie} unika ataku!")
+            return
         zmniejszone = max(obrazenia - self.obrona, 0)
         self.zdrowie -= zmniejszone
-        print(f"{self.imie} otrzymuje {zmniejszone} obrazen (pozostalo {self.zdrowie})")
+        print(f"{self.imie} otrzymal {zmniejszone} obrazen (pozostalo: {self.zdrowie})")
 
     def czy_zyje(self):
         return self.zdrowie > 0
-    
+
 class Wojownik(Postac):
     def __init__(self, imie):
-        super().__init__(imie, zdrowie=120, atak=20, obrona=10)
+        super().__init__(imie, zdrowie=120, atak=20, obrona=10, unik=0.05, trafienie=0.85)
 
     def mocny_cios(self, cel):
-        obrazenia = self.atak * 1.5
+        if random.random() > self.trafienie:
+            print(f"{self.imie} chybia Mocnym Ciosem!")
+            return
+        obrazenia = self.atak * random.uniform(1.4, 1.6)
         print(f"{self.imie} uzywa Mocny Cios!")
         cel.otrzymaj_obrazenia(obrazenia)
 
 class Mag(Postac):
     def __init__(self, imie):
-        super().__init__(imie, zdrowie=80, atak=10, obrona=5)
+        super().__init__(imie, zdrowie=80, atak=10, obrona=5, unik=0.15, trafienie=0.75)
         self.mana = 100
         self.lista_zaklec = []
 
     def rzuc_zaklecie(self, zaklecie, cel):
-        if self.mana >= zaklecie.koszt_many:
-            self.mana -= zaklecie.koszt_many
-            print(f"{self.imie} rzuca zaklecie {zaklecie.nazwa}!")
+        if self.mana < zaklecie.koszt_many:
+            print("Za malo many!")
+            return
+        if random.random() > self.trafienie:
+            print(f"{self.imie} chybia zakleciem {zaklecie.nazwa}!")
+            self.mana -= zaklecie.koszt_many // 2
+            return
+        self.mana -= zaklecie.koszt_many
+        obrazenia = zaklecie.obrazenia * random.uniform(0.9, 1.2)
+        print(f"{self.imie} rzuca zaklecie {zaklecie.nazwa}!")
+        cel.otrzymaj_obrazenia(obrazenia)
 
 class Zaklecie:
     def __init__(self, nazwa, obrazenia, koszt_many):
