@@ -1,3 +1,5 @@
+import random
+
 class Postac:
     def __init__(self, imie, zdrowie, atak, obrona, unik=0.1, trafienie=0.8):
         self.imie = imie
@@ -32,6 +34,17 @@ class Wojownik(Postac):
         obrazenia = self.atak * random.uniform(1.4, 1.6)
         print(f"{self.imie} uzywa Mocny Cios!")
         cel.otrzymaj_obrazenia(obrazenia)
+
+class Mag(Postac):
+    def __init__(self, imie):
+        super().__init__(imie, zdrowie=80, atak=10, obrona=5)
+        self.mana = 100
+        self.lista_zaklec = []
+
+    def rzuc_zaklecie(self, zaklecie, cel):
+        if self.mana >= zaklecie.koszt_many:
+            self.mana -= zaklecie.koszt_many
+            print(f"{self.imie} rzuca zaklecie {zaklecie.nazwa}!")
 
 class Mag(Postac):
     def __init__(self, imie):
