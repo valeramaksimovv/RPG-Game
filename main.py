@@ -37,17 +37,6 @@ class Wojownik(Postac):
 
 class Mag(Postac):
     def __init__(self, imie):
-        super().__init__(imie, zdrowie=80, atak=10, obrona=5)
-        self.mana = 100
-        self.lista_zaklec = []
-
-    def rzuc_zaklecie(self, zaklecie, cel):
-        if self.mana >= zaklecie.koszt_many:
-            self.mana -= zaklecie.koszt_many
-            print(f"{self.imie} rzuca zaklecie {zaklecie.nazwa}!")
-
-class Mag(Postac):
-    def __init__(self, imie):
         super().__init__(imie, zdrowie=80, atak=10, obrona=5, unik=0.15, trafienie=0.75)
         self.mana = 100
         self.lista_zaklec = []
@@ -62,7 +51,7 @@ class Mag(Postac):
             return
         self.mana -= zaklecie.koszt_many
         obrazenia = zaklecie.obrazenia * random.uniform(0.9, 1.2)
-        print(f"{self.imie} rzuca zaklecie {zaklecie.nazwa}!")
+        print(f"{self.imie} rzuca zaklecie {zaklecie.nazwa}! Pozostala mana: {self.mana}")
         cel.otrzymaj_obrazenia(obrazenia)
 
 class Zaklecie:
@@ -80,7 +69,7 @@ class Przedmiot:
         self.bonus_atak = bonus_atak
         self.bonus_zdrowie = bonus_zdrowie
         self.bonus_obrona = bonus_obrona
-        self.typ = typ 
+        self.typ = typ
 
     def wypisz_przedmiot(self):
         return f"{self.nazwa} (+{self.bonus_atak} atak, +{self.bonus_zdrowie} hp, +{self.bonus_obrona} obrona) [{self.typ}]"
@@ -122,30 +111,53 @@ class Walka:
         self.postac2 = postac2
         self.czyja_tura = 1
 
-    def rozpocnij(self):
+    def rozpocznij(self):
         print("--- START WALKI ---")
-        while self.poctac1.czy_zyje() and self.postac2.czy_zyje():
+        while self.postac1.czy_zyje() and self.postac2.czy_zyje():
             self.wykonaj_ture()
-            self.sprawdz_zwyciezce()
-    
+        self.sprawdz_zwyciezce()
+
     def wykonaj_ture(self):
         if self.czyja_tura == 1:
-            print(f"Tura: {self.postac1.imie}")
+            print(f"\nTura: {self.postac1.imie}")
             if isinstance(self.postac1, Mag) and self.postac1.lista_zaklec:
                 self.postac1.rzuc_zaklecie(self.postac1.lista_zaklec[0], self.postac2)
-            elif isinstance(self.postac2, Wojownik):
+            elif isinstance(self.postac1, Wojownik):
                 self.postac1.mocny_cios(self.postac2)
             self.czyja_tura = 2
         else:
-            print(f"Tura: {self.postac2.imie}")
-            if isinstance(self.postac1, Mag) and self.postac2.lista_zaklec:
-                self.postac2.rzuc_zaklecie(self.postac1.lista_zaklec[0], self.postac1)
+            print(f"\nTura: {self.postac2.imie}")
+            if isinstance(self.postac2, Mag) and self.postac2.lista_zaklec:
+                self.postac2.rzuc_zaklecie(self.postac2.lista_zaklec[0], self.postac1)
             elif isinstance(self.postac2, Wojownik):
-                self.postac2.mocny_cios(self.postac2)
+                self.postac2.mocny_cios(self.postac1)
             self.czyja_tura = 1
-    
+
     def sprawdz_zwyciezce(self):
+        print("\n--- KONIEC WALKI ---")
         if self.postac1.czy_zyje():
-            print(f"Zwyciezca: {self.postac1.imei}")
+            print(f"Zwyciezca: {self.postac1.imie}")
         else:
-            print(f"Zwyciezca: {self.postac1.imei}")
+            print(f"Zwyciezca: {self.postac2.imie}")
+
+
+print("Rozpoczynamy przygodę w tekstowej grze RPG!\n")
+
+thorin = Wojownik("Thorin")
+gandalf = Mag("Gandalf")
+
+print(f"Wojownik: {thorin.imie} (HP: {thorin.zdrowie}, Atak: {thorin.atak}, Obrona: {thorin.obrona})")
+print(f"Mag: {gandalf.imie} (HP: {gandalf.zdrowie}, Atak: {gandalf.atak}, Mana: {gandalf.mana})\n")
+
+# Zaklęcia
+fireball = Zaklecie("Ognista Kula", 30, 20)
+icebolt = Zaklecie("Lodowy Pocisk", 20, 15)
+gandalf.lista_zaklec.append(fireball)
+gandalf.lista_zaklec.append(icebolt)
+
+print(f"{gandalf.imie} zna zaklęcia: {[z.nazwa for z in gandalf.lista_zaklec]}\n")
+
+# Walka
+print("Zaczyna się walka!")
+walka = Walka(gandalf, thorin)
+walka.rozpocznij()
